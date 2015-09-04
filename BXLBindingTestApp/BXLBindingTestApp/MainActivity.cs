@@ -32,19 +32,33 @@ namespace BXLBindingTestApp
             button.Click += delegate
             {
                 Jpos.POSPrinter p = new Jpos.POSPrinter(this);
-                p.Open(logicalName); //SPP-R300
+                try
+                {
+                    button.Enabled = false;
 
-                p.Claim(0);
-                p.DeviceEnabled = true;
-                
-                //Print out text. Be sure to have a new line (\n) at the end of the data.
-                p.PrintNormal(
-                    Jpos.POSPrinterConst.PtrSReceipt,
-                    "This is a test.\nLorem Ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum.\nThis is a new line.\n");
-                p.Close();
+                    p.Open(logicalName); //SPP-R300
+                    p.Claim(0);
+                    p.DeviceEnabled = true;
+
+                    //Print out text. Be sure to have a new line (\n) at the end of the data.
+                    p.PrintNormal(
+                        Jpos.POSPrinterConst.PtrSReceipt,
+                        "This is a test.\nLorem Ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum.\nThis is a new line.\n");
+                }
+                finally
+                {
+                    button.Enabled = true;
+
+                    if(p != null)
+                        p.Close();
+                }
             };
         }
 
+        /// <summary>
+        /// Retrieve the logical name of the printer via Bluetooth. 
+        /// </summary>
+        /// <returns></returns>
         private String GetNameOfPrinter()
         {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.DefaultAdapter;
@@ -58,6 +72,9 @@ namespace BXLBindingTestApp
             return String.Empty;
         }
 
+        /// <summary>
+        /// Create the jpos.xml config. An entry is required in this file for the printer that is being used.
+        /// </summary>
         private void CreateNewConfigFile()
         {
             var inStream = this.Resources.OpenRawResource(Resource.Raw.jpos);
