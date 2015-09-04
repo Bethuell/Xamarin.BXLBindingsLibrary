@@ -1,0 +1,43 @@
+<metadata>
+  <!--
+  This sample removes the class: android.support.v4.content.AsyncTaskLoader.LoadTask:
+  <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='AsyncTaskLoader.LoadTask']" />
+  
+  This sample removes the method: android.support.v4.content.CursorLoader.loadInBackground:
+  <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
+  -->
+
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp437']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp737']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp775']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp850']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp852']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp855']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp857']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp858']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp860']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp862']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp863']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp864']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp865']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp866']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Cp928']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Farsi']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Katakana']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='KhmerCambodia']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Thai11']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Thai14']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Thai16']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Thai18']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Thai42']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1250']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1251']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1252']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1253']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1254']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1255']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1256']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1257']" />
+  <remove-node path="/api/package[@name='com.bxl.printer.charset']/class[@name='Windows1258']" />
+  <remove-node path="/api/package[@name='com.bxl.connectivity']/class[@name='NetworkService']" />
+</metadata>
