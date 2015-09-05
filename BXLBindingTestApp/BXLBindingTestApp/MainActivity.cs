@@ -15,6 +15,8 @@ namespace BXLBindingTestApp
     [Activity(Label = "BXLBindingTestApp", MainLauncher = true, Icon = "@drawable/icon", ScreenOrientation=Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : Activity
     {
+        const int PDF_PAGE_COUNT = 2;
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -24,34 +26,20 @@ namespace BXLBindingTestApp
             string logicalName = GetNameOfPrinter();
 
             if (String.IsNullOrEmpty(logicalName))
-                Toast.MakeText(this, "Could not find printer. Please make sure your device is paired to the printer via Bluetooth.", ToastLength.Long);
+                Toast.MakeText(this, "Could not find printer. Please make sure your device is paired to the printer via Bluetooth.", ToastLength.Long).Show();
 
             CreateNewConfigFile();
 
-            var button = FindViewById<Button>(Resource.Id.MyButton);
-            button.Click += delegate
+            var btnPrintText = FindViewById<Button>(Resource.Id.btnPrintText);
+            btnPrintText.Click += delegate
             {
-                Jpos.POSPrinter p = new Jpos.POSPrinter(this);
-                try
-                {
-                    button.Enabled = false;
+                PrintText(logicalName, btnPrintText);
+            };
 
-                    p.Open(logicalName); //SPP-R300
-                    p.Claim(0);
-                    p.DeviceEnabled = true;
-
-                    //Print out text. Be sure to have a new line (\n) at the end of the data.
-                    p.PrintNormal(
-                        Jpos.POSPrinterConst.PtrSReceipt,
-                        "This is a test.\nLorem Ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum.\nThis is a new line.\n");
-                }
-                finally
-                {
-                    button.Enabled = true;
-
-                    if(p != null)
-                        p.Close();
-                }
+            var btnPrintPDF = FindViewById<Button>(Resource.Id.btnPrintPDF);
+            btnPrintPDF.Click += delegate
+            {
+                PrintPDF(logicalName, btnPrintPDF);
             };
         }
 
@@ -81,23 +69,103 @@ namespace BXLBindingTestApp
 
             try
             {
-                var myfolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-                var mypath = System.IO.Path.Combine(myfolder, "jpos.xml");
-                using (var myfile = File.Create(mypath))
+                var personalDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                var jposPath = System.IO.Path.Combine(personalDir, "jpos.xml");
+                using (var file = File.Create(jposPath))
                 {
-                    inStream.CopyTo(myfile);
+                    inStream.CopyTo(file);
                 }
             }
             finally
             {
                 try
                 {
-                    inStream.Close();
+                    if (inStream != null)
+                        inStream.Close();
                 }
-                catch (IOException e)
+                catch (IOException e) { }
+            }
+        }
+
+        private void PrintText(string printerLogicalName, Button printButton)
+        {
+            Jpos.POSPrinter p = new Jpos.POSPrinter(this);
+            try
+            {
+                printButton.Enabled = false;
+
+                p.Open(printerLogicalName); //SPP-R300
+                p.Claim(0);
+                p.DeviceEnabled = true;
+
+                //Print out text. Be sure to have a new line (\n) at the end of the data.
+                p.PrintNormal(
+                    Jpos.POSPrinterConst.PtrSReceipt,
+                    "This is a test.\nLorem Ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum.\nThis is a new line.\n");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                Toast.MakeText(this, "Error:\n" + e.StackTrace, ToastLength.Long).Show();
+            }
+            finally
+            {
+                printButton.Enabled = true;
+
+                if (p != null)
+                    p.Close();
+            }
+        }
+
+        private void PrintPDF(string printerLogicalName, Button printButton)
+        {
+            Jpos.POSPrinter p = new Jpos.POSPrinter(this);
+            var inStream = this.Resources.OpenRawResource(Resource.Raw.test_pdf);
+            try
+            {
+                var personalDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                var pdfPath = System.IO.Path.Combine(personalDir, "test.pdf");
+                using (var file = File.Create(pdfPath))
                 {
+                    inStream.CopyTo(file);
                 }
 
+                printButton.Enabled = false;
+
+                p.Open(printerLogicalName); //SPP-R300
+                p.Claim(0);
+                p.DeviceEnabled = true;
+
+                for (int pageNumber = 0; pageNumber < PDF_PAGE_COUNT; pageNumber++)
+                {
+                    //Print PDF
+                    p.PrintPDF(
+                        Jpos.POSPrinterConst.PtrSReceipt,           //Print Type
+                        pdfPath,                                    //Path to PDF file
+                        1000,                                       //Width
+                        Jpos.POSPrinterConst.PtrPdfLeft,            //Alignment
+                        pageNumber,                                 //Page
+                        50);                                        //Brightness
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                Toast.MakeText(this, "Error:\n" + e.StackTrace, ToastLength.Long).Show();
+            }
+            finally
+            {
+                printButton.Enabled = true;
+                
+                try
+                {
+                    if (inStream != null)
+                        inStream.Close();
+
+                    if (p != null)
+                        p.Close();
+                }
+                catch (IOException e) { }
             }
         }
     }
